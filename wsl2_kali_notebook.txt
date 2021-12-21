@@ -1,0 +1,123 @@
+wsl linux不能使用systemctl问题：
+linux命令sudo systemctl start mariadb
+	 sudo systemctl status mariadb
+在wsl中使用sudo service mariadb start替代
+	   sudo service mariadb status
+
+fzf fuzzy finder(看官方文档，下面都是看了官方文档后的记录和个人理解)：
+  vim $(fzf)
+  vim $(fzf --height 40% --reverse)
+fzf命令行最终的返回值就是文件路径(应该是字符串，个人推测，概不负责。。。）
+$()里面的表达式就相当于一个变量，最终的返回值都是文件路径，所以回车后vim打开文件
+()运算符保证里面的表达式优先运算执行
+fzf配置代码在.zshrc文件
+  :Buffers fzf.vim打开buffers的命令
+
+快捷键:
+ ctrl+j ctrl+k 选择向下和向上(方向键也行)
+
+export 临时环境变量
+.bashrc .zshrc 当前用户环境变量
+/etc/profile 所有用户环境变量
+
+vim-plug:
+ ctags程序其是叫"Exuberant Ctags"
+ sudo apt-get install exuberant-ctags
+
+20210902 django databases 填坑记录:
+1. wsl重装,sudo apt install python3-pip要安装;
+2. sudo apt install python3-distutils
+3. pip3 install pymysql和MySQLdb
+4. 查看官方文档:
+   databases-MariaDB-API驱动mysqlclient==>安装依赖(文档有写)==>pip3 install mysqlclient
+5. 其它runserver时根据提示安装，有些不懂的搜索引擎查
+6. 解决mariadb用户访问权限问题
+备忘录：mariadb
+	user:root
+	password:	默认为空
+
+	create user newuser@localhost identified by '123456';
+	user:fyf
+	password:123456
+	mysql -u fyf -p
+
+20211009 django新日志:
+vscode左下角选择interpreter解释器时没有发现虚拟环境下的python解释器路径,点击一下箭头圆圈刷新一下就有了
+
+Language Server Protocol (LSP) 语言服务协议 由vscode提出
+vim补全插件:
+    coc.nvim插件,依赖nodejs,c语言依赖clangd(llvm的一个工具),功能：代码补全,编译错误等。。。
+    CocInstall 安装插件 配置后打开vim会自动安装,不需要手动输入命令安装
+	CocUninstall 卸载插件
+    安装完插件之后还要在.vimrc配置才能使用
+    .vimrc let g:coc_global_extensions = ['coc-clangd', 'coc-pyright', 'coc-pairs']
+    coc-clangd插件,还要安装clangd,如果是archlinux要在vim打开c文件时,通过命令CocCommand clangd.install安装
+    :CocList extensions 查看安装的插件
+
+	coc.nvim tab补全与制表符冲突问题时,使用“shift+tab”输入制表符
+
+vim命令：
+	bd - buffer delete
+	buffers 列出所有buffer
+	buffer 1 选择buffer 1	简写: b 1
+
+vim ctrl + v 和系统粘贴快捷键冲突问题
+settings.json 在action中设置"command": "paste",
+                            "keys": "shift+insert"
+
+vim: vimgrep 多文件文本内容匹配搜索命令
+	 vimgrep /搜索文本/ 文件夹路径
+	 通配符: **当前目录 *当前目录及其子目录
+	 :copen
+	 :cope
+	 :cclose
+	 
+
+vim terminal:
+    botright terminal ++rows=15  vim打开terminal在下边,15行高
+    (bottom right 当前分区的下边,而且还要向右扩展)
+    +----+----+----+
+    ¦ f1 ¦    ¦    ¦
+    ¦    ¦    ¦    ¦
+    +----+ f2 ¦ f3 ¦
+    ¦term¦    ¦    ¦
+    +----+----+----+
+
+sp vsp 命令后面可直接接文件名打开文件
+
+
+《tmux terminal multiplexer 窗口多路复用器》
+配置文件: .tmux.conf
+设置256color,set -g default-terminal "tmux-256color" 
+tmu的窗口相当于win11的桌面
+session1 ==> windows(一个会话可以多个窗口) ==> panes(一个窗口可以多个窗格)
+session2 ==> windows ==> panes
+tmux中的window相当于win11中的桌面
+pane窗格
+命令:
+	tmux 
+	tmux new -s [my_session_name]
+	tmux ls
+	attach 固定; detach 分离;
+	prefix 前缀;
+	tmux detach 退出会话而不是关闭
+	ctrl+b d 退出会话而不是关闭 (detach)
+	tmux kill-session -t 编号	t tab
+	tmux kill-session -t 会话名
+	ctrl+b	:kill-session -t 编号	t tab
+	ctrl+	:kill-session -t 会话名
+	tmux attach -t 编号/会话名 (打开一个会话)
+快捷键前缀: ctrl+b <prefix> 然后输入快捷键 (key binding)
+ctrl+b c	create winodw
+ctrl+b %	split window 左右
+ctrl+b "	split window 上下 双引号,从上分成两个部分
+ctrl+b o	other pane 切换当前session的窗格
+ctrl+b(按住不松开) o 窗格互换位置	
+
+ctrl+b :	输入new,回车,创建新session
+ctrl+b s	可以切换session
+ctrl+b w	可以切换windows,相当于win11的切换桌面
+
+ctrl+b pageup/pagedown 向上和向下翻页
+
+
